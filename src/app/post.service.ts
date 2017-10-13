@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -9,34 +9,21 @@ import { Post } from './post';
 
 @Injectable()
 export class PostService {
-
-  constructor(private _http: HttpClient) { }
+  constructor(private _http: HttpClient) {}
 
   getPosts(): Observable<Post[]> {
+    const params = new HttpParams()
+      .set('_sort', 'publicationDate')
+      .set('_order', 'DESC')
+      .set('publicationDate_lte', Date.now().toString());
 
-    /*=========================================================================|
-    | Pink Path                                                                |
-    |==========================================================================|
-    | Pide al servidor que te retorne los posts ordenados de más reciente a    |
-    | menos, teniendo en cuenta su fecha de publicación. Filtra también        |
-    | aquellos que aún no están publicados, pues no deberían mostrarse al      |
-    | usuario.                                                                 |
-    |                                                                          |
-    | En la documentación de 'JSON Server' tienes detallado cómo hacer el      |
-    | filtro y ordenación de los datos en tus peticiones, pero te ayudo        |
-    | igualmente. La querystring debe tener estos parámetros:                  |
-    |                                                                          |
-    |   - Filtro por fecha de publicación: publicationDate_lte=fecha           |
-    |   - Ordenación: _sort=publicationDate&_order=DESC                        |
-    |                                                                          |
-    | Una pista más, por si acaso: HttpParams.                                 |
-    |=========================================================================*/
-
-    return this._http.get<Post[]>(`${environment.backendUri}/posts`);
+    return this._http.get<Post[]>(
+      `${environment.backendUri}/posts`,
+      { params }
+    );
   }
 
   getUserPosts(id: number): Observable<Post[]> {
-
     /*=========================================================================|
     | Red Path                                                                 |
     |==========================================================================|
@@ -57,11 +44,10 @@ export class PostService {
     | Una pista más, por si acaso: HttpParams.                                 |
     |=========================================================================*/
 
-     return this._http.get<Post[]>(`${environment.backendUri}/posts`);
+    return this._http.get<Post[]>(`${environment.backendUri}/posts`);
   }
 
   getCategoryPosts(id: number): Observable<Post[]> {
-
     /*=========================================================================|
     | Yellow Path                                                              |
     |==========================================================================|
@@ -90,7 +76,7 @@ export class PostService {
     | Una pista más, por si acaso: HttpParams.                                 |
     |=========================================================================*/
 
-     return this._http.get<Post[]>(`${environment.backendUri}/posts`);
+    return this._http.get<Post[]>(`${environment.backendUri}/posts`);
   }
 
   getPostDetails(id: number): Observable<Post> {
@@ -98,7 +84,6 @@ export class PostService {
   }
 
   createPost(post: Post): Observable<Post> {
-
     /*=========================================================================|
     | Purple Path                                                              |
     |==========================================================================|
@@ -111,5 +96,4 @@ export class PostService {
 
     return null;
   }
-
 }
