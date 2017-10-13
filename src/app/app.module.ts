@@ -5,12 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
-/*----------------------------------------------------------|
- | ~~~ Blue Path ~~~                                        |
- |----------------------------------------------------------|
- | Importa FromNowPipe para poder usarlo en este documento. |
- |----------------------------------------------------------*/
-
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AutoGrowDirective } from './auto-grow.directive';
@@ -32,6 +26,7 @@ import { PostsViewComponent } from './posts-view/posts-view.component';
 import { PostService } from './post.service';
 import { SearchBoxComponent } from './search-box/search-box.component';
 import { UserService } from './user.service';
+import { FromNowPipe } from './from-now.pipe';
 
 @NgModule({
   imports: [
@@ -42,16 +37,11 @@ import { UserService } from './user.service';
     ReactiveFormsModule
   ],
 
-  /*=========================================================================|
-  | Blue Path                                                                |
-  |==========================================================================|
-  | No olvides declarar FromNowPipe en el módulo.                            |
-  |=========================================================================*/
-
   declarations: [
     AppComponent,
     AutoGrowDirective,
     CategoryBoxComponent,
+    FromNowPipe,
     HeaderBarComponent,
     NewStoryComponent,
     PostDetailsComponent,

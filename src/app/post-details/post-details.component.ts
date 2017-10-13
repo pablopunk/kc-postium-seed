@@ -9,20 +9,18 @@ import { Post } from '../post';
   styleUrls: ['./post-details.component.css']
 })
 export class PostDetailsComponent implements OnInit {
-
   post: Post;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
-    @Inject(NativeWindow) private _window) { }
+    @Inject(NativeWindow) private _window
+  ) {}
 
   ngOnInit(): void {
-    this._activatedRoute
-        .data
-        .subscribe((data: { post: Post }) => {
-          this.post = data.post;
-          this._window.scrollTo(0, 0);
-        });
+    this._activatedRoute.data.subscribe((data: { post: Post }) => {
+      this.post = data.post;
+      this._window.scrollTo(0, 0);
+    });
   }
 
   plainTextToHtml(text: string): string {
@@ -47,5 +45,4 @@ export class PostDetailsComponent implements OnInit {
   | '/posts/categories', pasando como parámetro el identificador de la       |
   | categoría.                                                               |
   |=========================================================================*/
-
 }
