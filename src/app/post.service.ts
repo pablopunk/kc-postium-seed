@@ -21,6 +21,12 @@ const getPostParams = (additional = {}): HttpParams => {
   return params;
 };
 
+const postEsDeCategoria = (p: Post, id: number) =>
+  p.categories.filter(c => c.id.toString() === id.toString()).length > 0;
+
+const filtrarPostsPorCategoria = (posts: Post[], id: number) =>
+  posts.filter(p => postEsDeCategoria(p, id));
+
 @Injectable()
 export class PostService {
   constructor(private _http: HttpClient) {}
@@ -43,35 +49,13 @@ export class PostService {
   }
 
   getCategoryPosts(id: number): Observable<Post[]> {
-    /*=========================================================================|
-    | Yellow Path                                                              |
-    |==========================================================================|
-    | Ahora mismo, esta función está obteniendo todos los posts existentes, y  |
-    | solo debería obtener aquellos correspondientes a la categoría indicada.  |
-    | Añade los parámetros de búsqueda oportunos para que retorne solo los     |
-    | posts que buscamos. Ten en cuenta que, además, deben estar ordenados por |
-    | fecha de publicación descendente y obtener solo aquellos que estén       |
-    | publicados.                                                              |
-    |                                                                          |
-    | Este Path tiene un extra de dificultad: un objeto Post tiene una         |
-    | colección de objetos Categoria, y 'JSON Server' no permite filtrado en   |
-    | colecciones anidadas. Por tanto, te toca a ti darle una solución a este  |
-    | marrón. Una posibilidad sería aprovechar el operador 'map' de los        |
-    | observables. Sirven para transformar flujos de datos y, de alguna forma, |
-    | es lo que vamos buscando. Podríamos obtener todos los posts y luego      |
-    | filtrarlos por categoría en 'map'. Ahí te lo dejo.                       |
-    |                                                                          |
-    | En la documentación de 'JSON Server' tienes detallado cómo hacer el      |
-    | filtro y ordenación de los datos en tus peticiones, pero te ayudo        |
-    | igualmente. La querystring debe tener estos parámetros:                  |
-    |                                                                          |
-    |   - Filtro por fecha de publicación: publicationDate_lte=fecha           |
-    |   - Ordenación: _sort=publicationDate&_order=DESC                        |
-    |                                                                          |
-    | Una pista más, por si acaso: HttpParams.                                 |
-    |=========================================================================*/
+    const params = getPostParams();
 
-    return this._http.get<Post[]>(`${environment.backendUri}/posts`);
+    return this._http
+      .get<Post[]>(`${environment.backendUri}/posts`, {
+        params
+      })
+      .map(res => filtrarPostsPorCategoria(res, id));
   }
 
   getPostDetails(id: number): Observable<Post> {
