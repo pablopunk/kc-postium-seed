@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { NativeWindow } from '../window';
@@ -10,6 +10,7 @@ import { Post } from '../post';
 })
 export class PostDetailsComponent implements OnInit {
   post: Post;
+  @Output() authorClicked = new EventEmitter<number>();
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -27,14 +28,9 @@ export class PostDetailsComponent implements OnInit {
     return text ? `<p>${text.replace(/\n/gi, '</p><p>')}</p>` : '';
   }
 
-  /*=========================================================================|
-  | Red Path                                                                 |
-  |==========================================================================|
-  | Añade un manejador que navegue a la dirección correspondiente a los      |
-  | posts del autor indicado. Recuerda que para hacer esto necesitas         |
-  | inyectar como dependencia el Router de la app. La ruta a navegar es      |
-  | '/posts/users', pasando como parámetro el identificador del autor.       |
-  |=========================================================================*/
+  notificarAuthorClicked(id: number) {
+    this.authorClicked.emit(id);
+  }
 
   /*=========================================================================|
   | Yellow Path                                                              |

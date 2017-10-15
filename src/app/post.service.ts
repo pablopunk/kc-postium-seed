@@ -7,44 +7,39 @@ import 'rxjs/add/operator/map';
 import { environment } from '../environments/environment';
 import { Post } from './post';
 
+const getPostParams = (additional = {}): HttpParams => {
+  let params = new HttpParams()
+    .set('_sort', 'publicationDate')
+    .set('_order', 'DESC')
+    .set('publicationDate_lte', Date.now().toString());
+
+  for (const key in additional) {
+    if (additional[key]) {
+      params = params.append(key, additional[key]);
+    }
+  }
+  return params;
+};
+
 @Injectable()
 export class PostService {
   constructor(private _http: HttpClient) {}
 
   getPosts(): Observable<Post[]> {
-    const params = new HttpParams()
-      .set('_sort', 'publicationDate')
-      .set('_order', 'DESC')
-      .set('publicationDate_lte', Date.now().toString());
-
-    return this._http.get<Post[]>(
-      `${environment.backendUri}/posts`,
-      { params }
-    );
+    const params = getPostParams();
+    return this._http.get<Post[]>(`${environment.backendUri}/posts`, {
+      params
+    });
   }
 
   getUserPosts(id: number): Observable<Post[]> {
-    /*=========================================================================|
-    | Red Path                                                                 |
-    |==========================================================================|
-    | Ahora mismo, esta función está obteniendo todos los posts existentes, y  |
-    | solo debería obtener aquellos correspondientes al autor indicado. Añade  |
-    | los parámetros de búsqueda oportunos para que retorne solo los posts que |
-    | buscamos. Ten en cuenta que, además, deben estar ordenados por fecha de  |
-    | publicación descendente y obtener solo aquellos que estén publicados.    |
-    |                                                                          |
-    | En la documentación de 'JSON Server' tienes detallado cómo hacer el      |
-    | filtro y ordenación de los datos en tus peticiones, pero te ayudo        |
-    | igualmente. La querystring debe tener estos parámetros:                  |
-    |                                                                          |
-    |   - Filtro por autor: author.id=autor                                    |
-    |   - Filtro por fecha de publicación: publicationDate_lte=fecha           |
-    |   - Ordenación: _sort=publicationDate&_order=DESC                        |
-    |                                                                          |
-    | Una pista más, por si acaso: HttpParams.                                 |
-    |=========================================================================*/
+    const params = getPostParams({
+      'author.id': id.toString()
+    });
 
-    return this._http.get<Post[]>(`${environment.backendUri}/posts`);
+    return this._http.get<Post[]>(`${environment.backendUri}/posts`, {
+      params
+    });
   }
 
   getCategoryPosts(id: number): Observable<Post[]> {

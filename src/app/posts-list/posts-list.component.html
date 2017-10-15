@@ -16,5 +16,6 @@
 <app-post-preview
   *ngFor="let post of posts"
   [post]="post"
-  (postClicked)="verPost($event)">
+  (postClicked)="verPost($event)"
+  (authorClicked)="verAuthor($event)">
 </app-post-preview>

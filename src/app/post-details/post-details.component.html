@@ -4,13 +4,11 @@
       <img [src]="post.author.avatar">
     </div>
     <div class="author">
-
-      <!--=======================================================================|
-      | Red Path                                                                 |
-      |==========================================================================|
-      | Un clic sobre el autor debería navegar a su colección de posts.          |
-      |========================================================================-->
-      <span class="name blink-font">{{ post.author.name }}</span>
+      <span
+        class="name blink-font"
+        (click)="notificarAuthorClicked(post.author)">
+        {{ post.author.name }}
+      </span>
       <span class="date">{{ post.publicationDate | fromNow }}</span>
     </div>
   </div>
@@ -23,11 +21,11 @@
   <div class="html-text" [innerHtml]="plainTextToHtml(post.body)"></div>
 
   <!--=======================================================================|
-  | Yellow Path                                                              |
-  |==========================================================================|
-  | Suscribe el componente CategoryBoxComponent al evento que hayas definido |
-  | en él para notificar los clics sobre las categorías del post.            |
-  |========================================================================-->
-  <app-category-box [categories]="post.categories"></app-category-box>
+    | Yellow Path                                                              |
+    |==========================================================================|
+    | Suscribe el componente CategoryBoxComponent al evento que hayas definido |
+    | en él para notificar los clics sobre las categorías del post.            |
+    |========================================================================-->
+    <app-category-box [categories]="post.categories"></app-category-box>
 
 </div>
