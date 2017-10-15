@@ -10,12 +10,9 @@ import { PostService } from '../post.service';
   templateUrl: './new-story.component.html'
 })
 export class NewStoryComponent implements OnDestroy {
-
   private _postSubscription: Subscription;
 
-  constructor(
-    private _postService: PostService,
-    private _router: Router) { }
+  constructor(private _postService: PostService, private _router: Router) {}
 
   ngOnDestroy(): void {
     this._unsubscribePostCreation();
@@ -24,8 +21,8 @@ export class NewStoryComponent implements OnDestroy {
   createPost(post: Post): void {
     this._unsubscribePostCreation();
     this._postSubscription = this._postService
-                                 .createPost(post)
-                                 .subscribe(() => this._router.navigate(['/']));
+      .createPost(post)
+      .subscribe(() => this._router.navigate(['/']));
   }
 
   private _unsubscribePostCreation(): void {
@@ -33,5 +30,4 @@ export class NewStoryComponent implements OnDestroy {
       this._postSubscription.unsubscribe();
     }
   }
-
 }
